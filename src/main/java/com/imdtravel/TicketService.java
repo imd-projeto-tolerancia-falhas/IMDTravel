@@ -7,7 +7,6 @@ import com.imdtravel.dto.BonusRequest;
 import com.imdtravel.dto.BuyRequest;
 import com.imdtravel.dto.SellRequest;
 import org.springframework.stereotype.Service;
-
 import java.util.UUID;
 
 @Service
@@ -30,6 +29,7 @@ public class TicketService {
             var ok = fidelityClient.addBonus(new BonusRequest(buyRequest.user(), flightResponse.value().intValue()));
             return sellId;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

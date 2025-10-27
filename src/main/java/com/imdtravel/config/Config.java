@@ -14,7 +14,7 @@ public class Config {
     @Bean
     public AirlinesHubClient airlinesHubClient(RestClient.Builder builder) {
         RestClient restClient = builder
-                .baseUrl("http://matching-service")
+                .baseUrl("http://airlines-hub:8082")
                 .build();
         RestClientAdapter adapter = RestClientAdapter.create(restClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory
@@ -25,7 +25,7 @@ public class Config {
     @Bean
     public ExchangeClient exchangeClient(RestClient.Builder builder) {
         RestClient restClient = builder
-                .baseUrl("http://portfolio-service")
+                .baseUrl("http://exchange:8083")
                 .build();
         RestClientAdapter adapter = RestClientAdapter.create(restClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory
@@ -37,7 +37,7 @@ public class Config {
     @Bean
     public FidelityClient fidelityClient(RestClient.Builder builder) {
         RestClient restClient = builder
-                .baseUrl("http://portfolio-service")
+                .baseUrl("http://fidelity:8081")
                 .build();
         RestClientAdapter adapter = RestClientAdapter.create(restClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory
