@@ -8,6 +8,6 @@ import java.math.BigDecimal;
 @HttpExchange(accept = "application/json", contentType = "application/json")
 public interface ExchangeClient {
 
-    @GetExchange(value = "/exchange")
+    @GetExchange(value = "/convert")
     BigDecimal getExchangeRate();
 }
