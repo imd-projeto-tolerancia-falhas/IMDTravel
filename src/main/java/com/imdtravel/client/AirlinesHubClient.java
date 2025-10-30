@@ -2,6 +2,7 @@ package com.imdtravel.client;
 
 import com.imdtravel.dto.FlightResponse;
 import com.imdtravel.dto.SellRequest;
+import com.imdtravel.dto.SellResponse;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.service.annotation.GetExchange;
@@ -18,5 +19,5 @@ public interface AirlinesHubClient {
     FlightResponse getFlight(@RequestParam String flight, @RequestParam LocalDate day);
 
     @PostExchange(value = "/sell")
-    UUID sellTicket(@RequestBody SellRequest sellRequest);
+    SellResponse sellTicket(@RequestBody SellRequest sellRequest);
 }

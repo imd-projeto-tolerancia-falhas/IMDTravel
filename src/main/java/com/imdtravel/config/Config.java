@@ -14,7 +14,7 @@ public class Config {
     @Bean
     public AirlinesHubClient airlinesHubClient(RestClient.Builder builder) {
         RestClient restClient = builder
-                .baseUrl("http://airlines-hub:8082")
+                .baseUrl("http://airlines-hub:8083")
                 .build();
         RestClientAdapter adapter = RestClientAdapter.create(restClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory
@@ -25,7 +25,7 @@ public class Config {
     @Bean
     public ExchangeClient exchangeClient(RestClient.Builder builder) {
         RestClient restClient = builder
-                .baseUrl("http://exchange:8083")
+                .baseUrl("http://exchange:8082")
                 .build();
         RestClientAdapter adapter = RestClientAdapter.create(restClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory

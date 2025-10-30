@@ -6,6 +6,7 @@ import com.imdtravel.client.FidelityClient;
 import com.imdtravel.dto.BonusRequest;
 import com.imdtravel.dto.BuyRequest;
 import com.imdtravel.dto.SellRequest;
+import com.imdtravel.dto.SellResponse;
 import org.springframework.stereotype.Service;
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public class TicketService {
         this.fidelityClient = fidelityClient;
     }
 
-    public UUID buyTicket(BuyRequest buyRequest) {
+    public SellResponse buyTicket(BuyRequest buyRequest) {
         try{
             var flightResponse = airlinesHubClient.getFlight(buyRequest.flight(), buyRequest.day());
             var exchangeRate = exchangeClient.getExchangeRate();

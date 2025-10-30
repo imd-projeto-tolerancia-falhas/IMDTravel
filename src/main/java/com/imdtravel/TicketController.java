@@ -1,6 +1,7 @@
 package com.imdtravel;
 
 import com.imdtravel.dto.BuyRequest;
+import com.imdtravel.dto.SellResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,11 +20,11 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<UUID> buyTicket(@RequestBody BuyRequest buyRequest) {
-        UUID id = ticketService.buyTicket(buyRequest);
-        if (id == null) {
+    public ResponseEntity<SellResponse> buyTicket(@RequestBody BuyRequest buyRequest) {
+        var response = ticketService.buyTicket(buyRequest);
+        if (response.id() == null) {
             return ResponseEntity.internalServerError().build();
         }
-        return ResponseEntity.ok(id);
+        return ResponseEntity.ok(response);
     }
 }
