@@ -16,14 +16,14 @@ public class TicketService {
     private static final Logger log = LoggerFactory.getLogger(TicketService.class);
 
     private final AirlinesHubClient airlinesHubClient;
+    private final FlightService flightService;
     private final ExchangeService exchangeService;
-    private final FidelityClient fidelityClient;
     private final FidelityService fidelityService;
 
-    public TicketService(AirlinesHubClient airlinesHubClient, ExchangeService exchangeService, FidelityClient fidelityClient, FidelityService fidelityService) {
+    public TicketService(AirlinesHubClient airlinesHubClient, ExchangeService exchangeService, FlightService flightService, FidelityService fidelityService) {
         this.airlinesHubClient = airlinesHubClient;
         this.exchangeService = exchangeService;
-        this.fidelityClient = fidelityClient;
+        this.flightService = flightService;
         this.fidelityService = fidelityService;
     }
 
@@ -31,18 +31,18 @@ public class TicketService {
     public SellResponse buyTicket(BuyRequest buyRequest) {
         if (buyRequest.ft().equals(Boolean.TRUE)){
             try{
-                var flightResponse = airlinesHubClient.getFlight(buyRequest.flight(), buyRequest.day());
+                var flightResponse = flightService.getFlightWithRetry(buyRequest.flight(), buyRequest.day());
                 var exchangeRate = exchangeService.getTaxOrAverage();
                 var sellId = airlinesHubClient.sellTicket(new SellRequest(buyRequest.flight(), buyRequest.day()));
                 fidelityService.addBonus(new BonusRequest(buyRequest.user(), flightResponse.value().intValue()));
                 return sellId;
             } catch (Exception e) {
                 log.error(e.getMessage());
-                return null;
+                throw new RuntimeException("Não foi possível concluir a compra do ticket.", e);
             }
         } else {
             try{
-                var flightResponse = airlinesHubClient.getFlight(buyRequest.flight(), buyRequest.day());
+                var flightResponse = flightService.getFlightNoTolerance(buyRequest.flight(), buyRequest.day());
                 var exchangeRate = exchangeService.getTaxNoTolerance();
                 var sellId = airlinesHubClient.sellTicket(new SellRequest(buyRequest.flight(), buyRequest.day()));
                 fidelityService.addBonusNotTolerant(new BonusRequest(buyRequest.user(), flightResponse.value().intValue()));

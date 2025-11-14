@@ -19,9 +19,16 @@ import java.time.Duration;
 public class Config {
     @Bean
     public AirlinesHubClient airlinesHubClient(RestClient.Builder builder) {
+
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout(Duration.ofSeconds(2));
+        requestFactory.setReadTimeout(Duration.ofSeconds(2));
+
         RestClient restClient = builder
                 .baseUrl("http://airlines-hub:8083")
+                .requestFactory(requestFactory)
                 .build();
+
         RestClientAdapter adapter = RestClientAdapter.create(restClient);
         HttpServiceProxyFactory factory = HttpServiceProxyFactory
                 .builderFor(adapter)
