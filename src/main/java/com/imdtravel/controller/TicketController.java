@@ -38,8 +38,5 @@ public class TicketController {
         }catch (CircuitBreakerIsOpenException e) {
             return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(e.getMessage());
         }
-        catch (AirlinesHubException e) {
-            return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT).body(e.getMessage());
-        }
     }
 }
