@@ -1,4 +1,4 @@
-package com.imdtravel;
+package com.imdtravel.service;
 
 import com.imdtravel.client.ExchangeClient;
 import com.imdtravel.exceptions.ExchangeException;
@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 

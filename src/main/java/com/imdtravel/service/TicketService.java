@@ -1,7 +1,6 @@
-package com.imdtravel;
+package com.imdtravel.service;
 
 import com.imdtravel.client.AirlinesHubClient;
-import com.imdtravel.client.ExchangeClient;
 import com.imdtravel.client.FidelityClient;
 import com.imdtravel.dto.BonusRequest;
 import com.imdtravel.dto.BuyRequest;
@@ -11,9 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.util.*;
-
 @Service
 public class TicketService {
 
@@ -22,11 +18,13 @@ public class TicketService {
     private final AirlinesHubClient airlinesHubClient;
     private final ExchangeService exchangeService;
     private final FidelityClient fidelityClient;
+    private final FidelityService fidelityService;
 
-    public TicketService(AirlinesHubClient airlinesHubClient, ExchangeService exchangeService, FidelityClient fidelityClient) {
+    public TicketService(AirlinesHubClient airlinesHubClient, ExchangeService exchangeService, FidelityClient fidelityClient, FidelityService fidelityService) {
         this.airlinesHubClient = airlinesHubClient;
         this.exchangeService = exchangeService;
         this.fidelityClient = fidelityClient;
+        this.fidelityService = fidelityService;
     }
 
 
@@ -36,7 +34,7 @@ public class TicketService {
                 var flightResponse = airlinesHubClient.getFlight(buyRequest.flight(), buyRequest.day());
                 var exchangeRate = exchangeService.getTaxOrAverage();
                 var sellId = airlinesHubClient.sellTicket(new SellRequest(buyRequest.flight(), buyRequest.day()));
-                var ok = fidelityClient.addBonus(new BonusRequest(buyRequest.user(), flightResponse.value().intValue()));
+                fidelityService.addBonus(new BonusRequest(buyRequest.user(), flightResponse.value().intValue()));
                 return sellId;
             } catch (Exception e) {
                 log.error(e.getMessage());
@@ -47,7 +45,7 @@ public class TicketService {
                 var flightResponse = airlinesHubClient.getFlight(buyRequest.flight(), buyRequest.day());
                 var exchangeRate = exchangeService.getTaxNoTolerance();
                 var sellId = airlinesHubClient.sellTicket(new SellRequest(buyRequest.flight(), buyRequest.day()));
-                var ok = fidelityClient.addBonus(new BonusRequest(buyRequest.user(), flightResponse.value().intValue()));
+                fidelityService.addBonusNotTolerant(new BonusRequest(buyRequest.user(), flightResponse.value().intValue()));
                 return sellId;
             } catch (Exception e) {
                 log.error(e.getMessage());

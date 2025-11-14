@@ -5,9 +5,15 @@ import com.imdtravel.client.ExchangeClient;
 import com.imdtravel.client.FidelityClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
+
+import java.net.http.HttpClient;
+import java.time.Duration;
 
 @Configuration
 public class Config {
@@ -36,7 +42,11 @@ public class Config {
 
     @Bean
     public FidelityClient fidelityClient(RestClient.Builder builder) {
+        SimpleClientHttpRequestFactory restFactory = new SimpleClientHttpRequestFactory();
+        restFactory.setConnectTimeout(1000);
+        restFactory.setReadTimeout(1000);
         RestClient restClient = builder
+                .requestFactory(restFactory)
                 .baseUrl("http://fidelity:8081")
                 .build();
         RestClientAdapter adapter = RestClientAdapter.create(restClient);
