@@ -27,7 +27,7 @@ public class AirlinesHubService {
         this.airlinesHubClient = airlinesHubClient;
     }
 
-    @Retry(name = "flight-retry")
+    @Retry(name = "flight-retry", fallbackMethod = "fallbackGetFlight")
     public FlightResponse getFlightWithRetry(String flight, LocalDate day) throws SocketTimeoutException {
         return airlinesHubClient.getFlight(flight, day);
     }
@@ -45,6 +45,11 @@ public class AirlinesHubService {
     public SellResponse fallbackSellTicket(SellRequest sellRequest, Throwable e) {
         log.warn("AirlinesHub call failed: {}", e.getMessage());
         throw new CircuitBreakerIsOpenException("AirlinesHub is unavailable.");
+    }
+
+    public FlightResponse fallbackGetFlight(String flight, LocalDate day, Throwable e) {
+        log.warn("Get flight call failed: {}", e.getMessage());
+        throw new RuntimeException("Getting flight details is not possible.");
     }
 
     public SellResponse sellTicketNoTolerance(SellRequest sellRequest) throws SocketTimeoutException {
