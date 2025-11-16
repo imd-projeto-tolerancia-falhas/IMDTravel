@@ -21,8 +21,8 @@ public class Config {
     public AirlinesHubClient airlinesHubClient(RestClient.Builder builder) {
 
         SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setConnectTimeout(Duration.ofSeconds(2));
-        requestFactory.setReadTimeout(Duration.ofSeconds(2));
+        requestFactory.setConnectTimeout(Duration.ofSeconds(1));
+        requestFactory.setReadTimeout(Duration.ofSeconds(1));
 
         RestClient restClient = builder
                 .baseUrl("http://airlines-hub:8083")
