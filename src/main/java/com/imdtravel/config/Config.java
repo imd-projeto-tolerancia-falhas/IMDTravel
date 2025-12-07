@@ -3,26 +3,28 @@ package com.imdtravel.config;
 import com.imdtravel.client.AirlinesHubClient;
 import com.imdtravel.client.ExchangeClient;
 import com.imdtravel.client.FidelityClient;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
-import java.net.http.HttpClient;
-import java.time.Duration;
-
 @Configuration
 public class Config {
     @Bean
     public AirlinesHubClient airlinesHubClient(RestClient.Builder builder) {
 
-        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setConnectTimeout(Duration.ofSeconds(1));
-        requestFactory.setReadTimeout(Duration.ofSeconds(1));
+        HttpClient httpClient = HttpClientBuilder.create().build();
+
+        HttpComponentsClientHttpRequestFactory requestFactory =
+                new HttpComponentsClientHttpRequestFactory(httpClient);
+
+        requestFactory.setConnectTimeout(1000);
+        requestFactory.setReadTimeout(1000);
 
         RestClient restClient = builder
                 .baseUrl("http://airlines-hub:8083")
@@ -33,8 +35,10 @@ public class Config {
         HttpServiceProxyFactory factory = HttpServiceProxyFactory
                 .builderFor(adapter)
                 .build();
+
         return factory.createClient(AirlinesHubClient.class);
     }
+
     @Bean
     public ExchangeClient exchangeClient(RestClient.Builder builder) {
         RestClient restClient = builder
