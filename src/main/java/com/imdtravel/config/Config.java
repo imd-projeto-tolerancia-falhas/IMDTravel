@@ -23,8 +23,8 @@ public class Config {
         HttpComponentsClientHttpRequestFactory requestFactory =
                 new HttpComponentsClientHttpRequestFactory(httpClient);
 
-        requestFactory.setConnectTimeout(1000);
-        requestFactory.setReadTimeout(1000);
+        requestFactory.setConnectTimeout(2000);
+        requestFactory.setReadTimeout(2000);
 
         RestClient restClient = builder
                 .baseUrl("http://airlines-hub:8083")

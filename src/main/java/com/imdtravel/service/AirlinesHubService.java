@@ -38,7 +38,6 @@ public class AirlinesHubService {
 
     @CircuitBreaker(name = "sellTicketCircuitBreaker", fallbackMethod = "fallbackSellTicket")
     public SellResponse sellTicketWithCircuitBreaker(SellRequest sellRequest) throws SocketTimeoutException {
-        log.info("Trying to sell ticket...");
         return airlinesHubClient.sellTicket(sellRequest);
     }
 
@@ -48,8 +47,8 @@ public class AirlinesHubService {
     }
 
     public FlightResponse fallbackGetFlight(String flight, LocalDate day, Throwable e) {
-        log.warn("Get flight call failed: {}", e.getMessage());
-        throw new RuntimeException("Getting flight details is not possible.");
+        log.warn("AirlinesHub call failed: {}", e.getMessage());
+        throw new AirlinesHubException("AirlinesHub is unavailable.");
     }
 
     public SellResponse sellTicketNoTolerance(SellRequest sellRequest) throws SocketTimeoutException {
